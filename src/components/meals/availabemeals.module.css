@@ -1,6 +1,6 @@
 .meals {
   position: relative;
-  width: 90%;
+  width: 80%;
   top:4rem;
   animation: meals-appear 1s ease-out forwards;
 }
