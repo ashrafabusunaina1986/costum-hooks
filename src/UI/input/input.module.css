@@ -1,0 +1,14 @@
+.input{
+    padding: 5px;
+    margin: 5px auto;
+}
+.input label{
+    font-size: 14px;font-weight: bold;
+    margin-left: 5px;
+}
+.input input{
+    padding: 5px;
+    box-shadow: 0 0 3px 3px rgba(0,0,0,0.25);
+    border-radius: 5px;
+    margin: 0 10px;
+}

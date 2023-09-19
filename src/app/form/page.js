@@ -45,6 +45,7 @@ const classSyles1 = {
   span: classes.span1,
   btn: classes.button1
 }
+export {classSyles1}
 const Form = () => {
   
  

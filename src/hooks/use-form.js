@@ -1,7 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import { Add_Context } from '@/context/addmeal/Addm'
+import React, { useContext, useEffect, useState } from 'react'
+import useHttp from './use-http/use-http'
 
 
-const useForm = (styleForm, inputElement = [], add = '') => {
+
+const useForm = (styleForm, inputElement = [], add = '', file) => {
     const init = () => {
         const inp = {}
         if (inputElement) {
@@ -13,11 +16,14 @@ const useForm = (styleForm, inputElement = [], add = '') => {
         }
         return inp
     }
-
+    const [post,setpost]=useState(null)
     const [input, setInput] = useState(init)
     const [error, setError] = useState(init)
     const [isActive, setIsActive] = useState(false)
     const [out, setout] = useState(init)
+    const [display, setDisplay] = useState(true)
+    const { meals } = useContext(Add_Context)
+    const { isLoading, sendRequest:save } = useHttp()
     const changeHandler = (e) => {
         setIsActive(false)
         const { id, value } = e.target
@@ -34,14 +40,37 @@ const useForm = (styleForm, inputElement = [], add = '') => {
             })
         }
     }
+        // useEffect(()=>{
+        //     if(post===null)return
+        //     console.log(post)  
+        // },[])
+        
     const formHandler = (e) => {
         e.preventDefault()
         const err = {}
         Object.keys(input).map(item => {
             if (input[`${item}`].trim() === '' || input[`${item}`].trim().length < 3) {
                 err[`${item}`] = `please enter ${item} greater than 2 letters`
+                setDisplay(true)
+            } else {
+                setDisplay(false)
             }
         })
+        if(Object.keys(err).length===0){
+            const meal1 = {
+                id: `m${file.length + 1}`,
+                name: input.name,
+                description: input.description,
+                price: Number(input.price)
+            }
+            console.log(meal1)
+            save({
+             url:'/api/addmeal',
+             method:'POST',
+             body:meal1   
+            },setpost)
+            
+        }
         setError(err)
         setIsActive(true)
 
@@ -57,7 +86,9 @@ const useForm = (styleForm, inputElement = [], add = '') => {
         }
     }
 
-
+    const cancelHandler = () => {
+        setDisplay(false)
+    }
     const formElement = (
         <form onSubmit={formHandler} className={styleForm.form}>
 
@@ -122,12 +153,13 @@ const useForm = (styleForm, inputElement = [], add = '') => {
             }
             <div>
                 <button className={styleForm.btn} >{add === '' ? '+' : add}</button>
+                <button onClick={cancelHandler} className={styleForm.btn} >cancel</button>
             </div>
 
 
         </form>)
 
-    return { formElement, out, isActive }
+    return { formElement, out, isActive, display }
 }
 
 export default useForm
