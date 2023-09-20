@@ -26,7 +26,7 @@ const AvailableMeals = (props) => {
         getData({
             url:'/api/data'
         },setData)
-    },[])        
+    },[data,setData])        
 
     return (
         <section className={styles.meals}>
