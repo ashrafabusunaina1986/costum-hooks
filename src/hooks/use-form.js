@@ -63,7 +63,10 @@ const useForm = (styleForm, inputElement = [], add = '', file = null) => {
                 save({
                     url: '/api/addmeal',
                     method: 'POST',
-                    body: meal1
+                    body: meal1,
+                    headers:{
+                        'Content-Type':'application/json'
+                    }
                 }, setpost)
 
             }
