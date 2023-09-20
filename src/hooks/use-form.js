@@ -4,7 +4,7 @@ import useHttp from './use-http/use-http'
 
 
 
-const useForm = (styleForm, inputElement = [], add = '', file) => {
+const useForm = (styleForm, inputElement = [], add = '', file = null) => {
     const init = () => {
         const inp = {}
         if (inputElement) {
@@ -16,14 +16,14 @@ const useForm = (styleForm, inputElement = [], add = '', file) => {
         }
         return inp
     }
-    const [post,setpost]=useState(null)
+    const [post, setpost] = useState(null)
     const [input, setInput] = useState(init)
     const [error, setError] = useState(init)
     const [isActive, setIsActive] = useState(false)
     const [out, setout] = useState(init)
     const [display, setDisplay] = useState(true)
     const { meals } = useContext(Add_Context)
-    const { isLoading, sendRequest:save } = useHttp()
+    const { isLoading, sendRequest: save } = useHttp()
     const changeHandler = (e) => {
         setIsActive(false)
         const { id, value } = e.target
@@ -40,11 +40,7 @@ const useForm = (styleForm, inputElement = [], add = '', file) => {
             })
         }
     }
-        // useEffect(()=>{
-        //     if(post===null)return
-        //     console.log(post)  
-        // },[])
-        
+
     const formHandler = (e) => {
         e.preventDefault()
         const err = {}
@@ -56,20 +52,21 @@ const useForm = (styleForm, inputElement = [], add = '', file) => {
                 setDisplay(false)
             }
         })
-        if(Object.keys(err).length===0){
-            const meal1 = {
-                id: `m${file.length + 1}`,
-                name: input.name,
-                description: input.description,
-                price: Number(input.price)
+        if (file) {
+            if (Object.keys(err).length === 0) {
+                const meal1 = {
+                    id: `m${file.length + 1}`,
+                    name: input.name,
+                    description: input.description,
+                    price: Number(input.price)
+                }
+                save({
+                    url: '/api/addmeal',
+                    method: 'POST',
+                    body: meal1
+                }, setpost)
+
             }
-            console.log(meal1)
-            save({
-             url:'/api/addmeal',
-             method:'POST',
-             body:meal1   
-            },setpost)
-            
         }
         setError(err)
         setIsActive(true)

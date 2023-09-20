@@ -7,6 +7,7 @@ import Button from '@/UI/button/Button'
 import Addm, { Add_Context } from '@/context/addmeal/Addm';
 import AddMeal from './addmael/AddMeal';
 import DUMMY_MEALS from './../../../public/data.json'
+import useHttp from '@/hooks/use-http/use-http';
 
 
 const AvailableMeals = (props) => {
@@ -14,11 +15,18 @@ const AvailableMeals = (props) => {
     const [isActive, setIsActive] = useState(false)
     const [error,setError]=useState('')
     const {toggle,meals}=useContext(Add_Context)
+    const [data,setData]=useState([])
     const ok = () => {
         setIsActive(true)
     }
 
-        
+    const {isLoading,sendRequest:getData}=useHttp()
+    
+    useEffect(()=>{
+        getData({
+            url:'/api/data'
+        },setData)
+    },[])        
 
     return (
         <section className={styles.meals}>
@@ -26,7 +34,7 @@ const AvailableMeals = (props) => {
                 {!isActive && <Button onClick={toggle} >Add Meal</Button> }
                 <ul>
                     {
-                        DUMMY_MEALS.map((meal) => {
+                        isLoading?'Loading...':data.data  && data.data.map((meal) => {
                             return <MealItem key={meal.id} id={meal.id} name={meal.name}
                                 price={meal.price} description={meal.description} />
                         })

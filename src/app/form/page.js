@@ -50,7 +50,7 @@ const Form = () => {
   
  
 
-  const { formElement: form1, out: entry ,isActive} = useForm(classSyles1,null,'+')
+  const { formElement: form1, out: entry ,isActive} = useForm(classSyles1,null,'+',null)
   return (
     <div>
       <Card>
