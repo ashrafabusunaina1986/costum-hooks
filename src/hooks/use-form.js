@@ -83,6 +83,7 @@ const useForm = (styleForm, inputElement = [], add = '', file = null) => {
         if (errNum === 0) {
             setout(input)
             setInput(init)
+            window.location.reload()            
         }
     }
 
